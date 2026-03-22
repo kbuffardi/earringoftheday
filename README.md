@@ -31,21 +31,14 @@ earringoftheday/
 - Java 17+ (for local backend development)
 - Node.js 20+ (for local frontend development)
 
-### Run with Docker Compose
-
-```bash
-docker compose up --build
-```
-
-- Frontend: http://localhost
-- Backend API: http://localhost:8080/api
-
 ### Local Development
 
-**Backend:**
+Run each service separately for the fastest development feedback loop.
+
+**Backend** (with Swagger UI enabled at http://localhost:8080/swagger-ui.html):
 ```bash
 cd backend
-mvn spring-boot:run
+mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
 **Frontend:**
@@ -54,6 +47,25 @@ cd frontend
 npm install
 npm run dev
 ```
+
+- Frontend dev server: http://localhost:5173
+- Backend API: http://localhost:8080/api
+- Swagger UI: http://localhost:8080/swagger-ui.html *(local profile only)*
+
+> **Note:** Swagger UI is only available when the backend is started with the `local` Spring profile. It is automatically disabled in all other environments.
+
+### Production Mode
+
+Build and run all services together using Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+- Frontend: http://localhost
+- Backend API: http://localhost:8080/api
+
+Swagger UI is **not** available in this mode.
 
 ## CI/CD
 
