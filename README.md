@@ -1,5 +1,7 @@
 # EarringOfTheDay (EOTD)
 
+[![Build Check](https://github.com/kbuffardi/earringoftheday/actions/workflows/build.yml/badge.svg)](https://github.com/kbuffardi/earringoftheday/actions/workflows/build.yml)
+
 A monorepo web application for your daily earring inspiration.
 
 ## Tech Stack
