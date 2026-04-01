@@ -55,9 +55,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         if (firstName != null) return firstName.toString();
         // Fallback: split "name" attribute
         Object name = user.getAttribute("name");
-        if (name != null) {
+        if (name != null && !name.toString().isBlank()) {
             String[] parts = name.toString().split(" ", 2);
-            return parts[0];
+            return parts.length > 0 && !parts[0].isBlank() ? parts[0] : "";
         }
         return "";
     }
@@ -71,9 +71,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         if (lastName != null) return lastName.toString();
         // Fallback: split "name" attribute
         Object name = user.getAttribute("name");
-        if (name != null) {
+        if (name != null && !name.toString().isBlank()) {
             String[] parts = name.toString().split(" ", 2);
-            return parts.length > 1 ? parts[1] : "";
+            return parts.length > 1 && !parts[1].isBlank() ? parts[1] : "";
         }
         return "";
     }

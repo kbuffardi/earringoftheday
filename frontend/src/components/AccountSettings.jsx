@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { apiFetch } from '../api'
 
 const NOTIFICATION_OPTIONS = [
   { value: 'DAILY', label: 'Daily emails', description: 'Get an email every day about new EOTD posts' },
@@ -15,10 +16,9 @@ function AccountSettings({ user, onUserUpdated }) {
     setSaving(true)
     setMessage(null)
     try {
-      const res = await fetch('/api/user/me/notifications', {
+      const res = await apiFetch('/api/user/me/notifications', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({ notificationPreference: preference }),
       })
       if (res.ok) {

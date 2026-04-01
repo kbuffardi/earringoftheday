@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -18,7 +19,10 @@ public class UserService {
     public UserService(UserRepository userRepository,
                        @Value("${app.admin-emails:redrachelmason@gmail.com,mydatacollection@gmail.com}") String adminEmails) {
         this.userRepository = userRepository;
-        this.defaultAdminEmails = Arrays.asList(adminEmails.split(","));
+        this.defaultAdminEmails = Arrays.stream(adminEmails.split(","))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
     }
 
     /**

@@ -5,6 +5,7 @@ import HomePage from './components/HomePage'
 import LoginPage from './components/LoginPage'
 import AccountSettings from './components/AccountSettings'
 import AdminPage from './components/AdminPage'
+import { apiFetch } from './api'
 
 function App() {
   const [user, setUser] = useState(undefined) // undefined = loading, null = not logged in
@@ -20,7 +21,7 @@ function App() {
   }, [])
 
   const handleLogout = () => {
-    fetch('/api/auth/logout', { method: 'POST', credentials: 'include' })
+    apiFetch('/api/auth/logout', { method: 'POST' })
       .then(() => setUser(null))
       .catch(() => setUser(null))
   }

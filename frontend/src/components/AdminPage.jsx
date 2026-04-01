@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { apiFetch } from '../api'
 
 function AdminPage() {
   const [query, setQuery] = useState('')
@@ -13,7 +14,7 @@ function AdminPage() {
       const url = searchQuery
         ? `/api/admin/users?query=${encodeURIComponent(searchQuery)}`
         : '/api/admin/users'
-      const res = await fetch(url, { credentials: 'include' })
+      const res = await apiFetch(url)
       if (res.ok) {
         setUsers(await res.json())
       } else {
@@ -37,10 +38,9 @@ function AdminPage() {
 
   const handleRoleChange = async (userId, newRole) => {
     try {
-      const res = await fetch(`/api/admin/users/${userId}/role`, {
+      const res = await apiFetch(`/api/admin/users/${userId}/role`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify({ role: newRole }),
       })
       if (res.ok) {
