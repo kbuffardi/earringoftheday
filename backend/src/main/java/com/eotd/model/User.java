@@ -26,6 +26,9 @@ public class User {
 
     private String lastName;
 
+    @Column(length = 1024)
+    private String avatarUrl;
+
     @Column(nullable = false)
     private LocalDateTime registrationDate;
 
@@ -56,6 +59,9 @@ public class User {
 
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
+
+    public String getAvatarUrl() { return avatarUrl; }
+    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
 
     public LocalDateTime getRegistrationDate() { return registrationDate; }
     public void setRegistrationDate(LocalDateTime registrationDate) { this.registrationDate = registrationDate; }

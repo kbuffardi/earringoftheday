@@ -28,16 +28,20 @@ public class UserService {
     /**
      * Creates a new user or updates an existing one on OAuth2 login.
      */
-    public User loginOrRegister(String email, String firstName, String lastName) {
+    public User loginOrRegister(String email, String firstName, String lastName, String avatarUrl) {
         Optional<User> existing = userRepository.findByEmail(email);
         if (existing.isPresent()) {
             User user = existing.get();
-            // Update name fields in case they changed
+            // Update name and avatar fields in case they changed
             user.setFirstName(firstName);
             user.setLastName(lastName);
+            if (avatarUrl != null) {
+                user.setAvatarUrl(avatarUrl);
+            }
             return userRepository.save(user);
         }
         User user = new User(email, firstName, lastName);
+        user.setAvatarUrl(avatarUrl);
         if (defaultAdminEmails.contains(email.toLowerCase())) {
             user.setRole(User.Role.ADMIN);
         }
