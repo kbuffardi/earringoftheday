@@ -1,38 +1,82 @@
 import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import LoginPage from './components/LoginPage'
+import AccountSettings from './components/AccountSettings'
+import AdminPage from './components/AdminPage'
+import Home from './pages/Home'
+import Admin from './pages/Admin'
+import { apiFetch } from './api'
 
 function App() {
-  const [status, setStatus] = useState(null)
+  const [user, setUser] = useState(undefined) // undefined = loading, null = not logged in
 
   useEffect(() => {
-    fetch('/api/health')
-      .then((res) => res.json())
-      .then((data) => setStatus(data))
-      .catch(() => setStatus({ status: 'unavailable' }))
+    fetch('/api/user/me', { credentials: 'include' })
+      .then((res) => {
+        if (res.ok) return res.json()
+        return null
+      })
+      .then((data) => setUser(data))
+      .catch(() => setUser(null))
   }, [])
 
+  const handleLogout = () => {
+    apiFetch('/api/auth/logout', { method: 'POST' })
+      .then(() => setUser(null))
+      .catch(() => setUser(null))
+  }
+
+  if (user === undefined) {
+    return (
+      <div className="min-h-screen bg-pink-50 flex items-center justify-center">
+        <p className="text-pink-400 text-lg">Loading…</p>
+      </div>
+    )
+  }
+
   return (
-    <div className="min-h-screen bg-pink-50 flex flex-col items-center justify-center">
-      <header className="mb-8 text-center">
-        <h1 className="text-5xl font-bold text-pink-600 mb-2">💎 EarringOfTheDay</h1>
-        <p className="text-gray-500 text-lg">Your daily earring inspiration</p>
-      </header>
-
-      <main className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
-        <p className="text-gray-700 mb-4">Welcome to EOTD — discover your earring of the day!</p>
-
-        {status && (
-          <div
-            className={`mt-4 px-4 py-2 rounded-full text-sm font-medium inline-block ${
-              status.status === 'ok'
-                ? 'bg-green-100 text-green-700'
-                : 'bg-red-100 text-red-700'
-            }`}
-          >
-            Backend: {status.status === 'ok' ? '✅ connected' : '❌ unavailable'}
-          </div>
-        )}
-      </main>
-    </div>
+    <BrowserRouter>
+      <Navbar user={user} onLogout={handleLogout} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" replace /> : <LoginPage />}
+        />
+        <Route
+          path="/account"
+          element={
+            user ? (
+              <AccountSettings user={user} onUserUpdated={setUser} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            user?.role === 'ADMIN' ? (
+              <Admin />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            user?.role === 'ADMIN' ? (
+              <AdminPage />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
