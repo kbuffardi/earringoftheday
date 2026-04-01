@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import HomePage from './components/HomePage'
 import LoginPage from './components/LoginPage'
 import AccountSettings from './components/AccountSettings'
 import AdminPage from './components/AdminPage'
+import Home from './pages/Home'
+import Admin from './pages/Admin'
 import { apiFetch } from './api'
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
     <BrowserRouter>
       <Navbar user={user} onLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={<HomePage user={user} />} />
+        <Route path="/" element={<Home />} />
         <Route
           path="/login"
           element={user ? <Navigate to="/" replace /> : <LoginPage />}
@@ -55,6 +56,16 @@ function App() {
         />
         <Route
           path="/admin"
+          element={
+            user?.role === 'ADMIN' ? (
+              <Admin />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        <Route
+          path="/admin/users"
           element={
             user?.role === 'ADMIN' ? (
               <AdminPage />

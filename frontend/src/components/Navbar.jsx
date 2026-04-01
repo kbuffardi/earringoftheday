@@ -13,9 +13,14 @@ function Navbar({ user, onLogout }) {
               {user.firstName || user.email}
             </Link>
             {user.role === 'ADMIN' && (
-              <Link to="/admin" className="hover:text-pink-100 text-sm font-medium">
-                Admin
-              </Link>
+              <>
+                <Link to="/admin" className="hover:text-pink-100 text-sm font-medium">
+                  EOTD Admin
+                </Link>
+                <Link to="/admin/users" className="hover:text-pink-100 text-sm font-medium">
+                  Users
+                </Link>
+              </>
             )}
             <button
               onClick={onLogout}
