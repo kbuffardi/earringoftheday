@@ -161,7 +161,7 @@ export default function Admin() {
                 name="brand"
                 value={form.brand}
                 onChange={handleChange}
-                placeholder="e.g. Kendra Scott"
+                placeholder="Brand name"
                 className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
               />
             </div>
@@ -173,7 +173,7 @@ export default function Admin() {
                 name="productName"
                 value={form.productName}
                 onChange={handleChange}
-                placeholder="e.g. Gold Hoop Earrings"
+                placeholder="Product name or ID"
                 className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
               />
             </div>
@@ -185,7 +185,7 @@ export default function Admin() {
                 name="referralLink"
                 value={form.referralLink}
                 onChange={handleChange}
-                placeholder="https://example.com/product?ref=eotd"
+                placeholder="https://..."
                 className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
               />
             </div>
@@ -213,7 +213,7 @@ export default function Admin() {
                 name="productImageUrl"
                 value={form.productImageUrl}
                 onChange={handleChange}
-                placeholder="https://example.com/image.jpg"
+                placeholder="https://..."
                 className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
               />
             </div>
@@ -227,7 +227,7 @@ export default function Admin() {
                 rows={6}
                 value={form.instructions}
                 onChange={handleChange}
-                placeholder="Describe the earring, discount codes, etc. Markdown is supported."
+                placeholder="Description and/or details (supports Markdown)"
                 className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 font-mono"
               />
             </div>
