@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -27,7 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     "spring.datasource.username=sa",
     "spring.datasource.password=",
     "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect",
-    "spring.jpa.hibernate.ddl-auto=create-drop"
+    "spring.jpa.hibernate.ddl-auto=create-drop",
+    "app.frontend-url=http://localhost:5173",
+    "app.admin-emails=redrachelmason@gmail.com,mydatacollection@gmail.com"
 })
 class EarringOfTheDayControllerTests {
 
@@ -46,6 +50,7 @@ class EarringOfTheDayControllerTests {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void getAll_returnsEmptyList() throws Exception {
         mockMvc.perform(get("/api/eotd"))
                 .andExpect(status().isOk())
@@ -53,6 +58,7 @@ class EarringOfTheDayControllerTests {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void createEotd_andGetAll() throws Exception {
         EarringOfTheDay eotd = new EarringOfTheDay();
         eotd.setDate(LocalDate.of(2024, 1, 15));
@@ -64,7 +70,7 @@ class EarringOfTheDayControllerTests {
         eotd.setInstagramPostUrl("https://www.instagram.com/p/abc123/");
         eotd.setDisplayOrder(0);
 
-        mockMvc.perform(post("/api/eotd")
+        mockMvc.perform(post("/api/eotd").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(eotd)))
                 .andExpect(status().isCreated())
@@ -77,6 +83,7 @@ class EarringOfTheDayControllerTests {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void updateEotd_updatesFields() throws Exception {
         EarringOfTheDay eotd = new EarringOfTheDay();
         eotd.setDate(LocalDate.of(2024, 1, 15));
@@ -86,7 +93,7 @@ class EarringOfTheDayControllerTests {
 
         saved.setBrand("NewBrand");
 
-        mockMvc.perform(put("/api/eotd/" + saved.getId())
+        mockMvc.perform(put("/api/eotd/" + saved.getId()).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(saved)))
                 .andExpect(status().isOk())
@@ -94,13 +101,14 @@ class EarringOfTheDayControllerTests {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void deleteEotd_removesEntry() throws Exception {
         EarringOfTheDay eotd = new EarringOfTheDay();
         eotd.setDate(LocalDate.of(2024, 1, 15));
         eotd.setDisplayOrder(0);
         EarringOfTheDay saved = eotdRepository.save(eotd);
 
-        mockMvc.perform(delete("/api/eotd/" + saved.getId()))
+        mockMvc.perform(delete("/api/eotd/" + saved.getId()).with(csrf()))
                 .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/api/eotd"))
@@ -158,12 +166,13 @@ class EarringOfTheDayControllerTests {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void update_notFound_returns404() throws Exception {
         EarringOfTheDay eotd = new EarringOfTheDay();
         eotd.setDate(LocalDate.of(2024, 1, 15));
         eotd.setDisplayOrder(0);
 
-        mockMvc.perform(put("/api/eotd/9999")
+        mockMvc.perform(put("/api/eotd/9999").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(eotd)))
                 .andExpect(status().isNotFound());

@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -42,12 +43,14 @@ public class EarringOfTheDayController {
 
     /** Admin: list all EOTD entries */
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<EarringOfTheDay> getAll() {
         return eotdRepository.findAll();
     }
 
     /** Admin: create a new EOTD entry */
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EarringOfTheDay> create(@RequestBody EarringOfTheDay eotd) {
         if (eotd.getDisplayOrder() == null) {
             eotd.setDisplayOrder(0);
@@ -58,6 +61,7 @@ public class EarringOfTheDayController {
 
     /** Admin: update an existing EOTD entry */
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public EarringOfTheDay update(@PathVariable Long id, @RequestBody EarringOfTheDay eotd) {
         if (!eotdRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "EOTD not found");
@@ -68,6 +72,7 @@ public class EarringOfTheDayController {
 
     /** Admin: delete an EOTD entry */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (!eotdRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "EOTD not found");
@@ -103,6 +108,7 @@ public class EarringOfTheDayController {
 
     /** Admin: get click stats summary for a specific EOTD */
     @GetMapping("/{id}/clicks")
+    @PreAuthorize("hasRole('ADMIN')")
     public Map<String, Object> getClickStats(@PathVariable Long id) {
         if (!eotdRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "EOTD not found");

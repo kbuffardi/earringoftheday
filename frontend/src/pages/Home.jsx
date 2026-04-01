@@ -24,20 +24,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-pink-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-pink-600">💎 EarringOfTheDay</h1>
-          <a
-            href="/admin"
-            className="text-sm text-gray-400 hover:text-pink-500 transition-colors"
-          >
-            Admin
-          </a>
-        </div>
-      </header>
-
-      {/* Main content */}
       <main className="max-w-4xl mx-auto px-4 py-10">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-extrabold text-gray-800 mb-2">

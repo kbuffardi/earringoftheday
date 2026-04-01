@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { apiFetch } from '../api'
 
 const EMPTY_FORM = {
   date: '',
@@ -22,7 +23,7 @@ export default function Admin() {
 
   const fetchAll = () => {
     setLoading(true)
-    fetch('/api/eotd')
+    apiFetch('/api/eotd', { credentials: 'include' })
       .then((r) => r.json())
       .then((data) => {
         setEntries(data.sort((a, b) => new Date(b.date) - new Date(a.date)))
@@ -75,7 +76,7 @@ export default function Admin() {
     const method = editingId ? 'PUT' : 'POST'
 
     try {
-      const res = await fetch(url, {
+      const res = await apiFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -95,7 +96,7 @@ export default function Admin() {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this entry?')) return
     try {
-      const res = await fetch(`/api/eotd/${id}`, { method: 'DELETE' })
+      const res = await apiFetch(`/api/eotd/${id}`, { method: 'DELETE' })
       if (!res.ok) throw new Error(`Server error: ${res.status}`)
       setSuccess('Entry deleted.')
       if (editingId === id) handleCancel()
@@ -107,16 +108,6 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-pink-600">💎 EOTD Admin</h1>
-          <a href="/" className="text-sm text-gray-400 hover:text-pink-500 transition-colors">
-            ← Back to site
-          </a>
-        </div>
-      </header>
-
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
         {/* Form */}
         <section className="bg-white rounded-2xl shadow p-6">
