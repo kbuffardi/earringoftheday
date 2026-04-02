@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import LoginPage from './components/LoginPage'
+import LoginModal from './components/LoginModal'
 import AccountSettings from './components/AccountSettings'
 import AdminPage from './components/AdminPage'
 import Home from './pages/Home'
@@ -10,6 +11,7 @@ import { apiFetch } from './api'
 
 function App() {
   const [user, setUser] = useState(undefined) // undefined = loading, null = not logged in
+  const [loginModalOpen, setLoginModalOpen] = useState(false)
 
   useEffect(() => {
     fetch('/api/user/me', { credentials: 'include' })
@@ -37,7 +39,10 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar user={user} onLogout={handleLogout} />
+      <Navbar user={user} onLogout={handleLogout} onLoginClick={() => setLoginModalOpen(true)} />
+      {loginModalOpen && !user && (
+        <LoginModal onClose={() => setLoginModalOpen(false)} />
+      )}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
