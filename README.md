@@ -56,6 +56,32 @@ npm run dev
 
 > **Note:** Swagger UI is only available when the backend is started with the `local` Spring profile. It is automatically disabled in all other environments.
 
+### OAuth2 Authentication Setup
+
+Social login (Google, Microsoft, Apple, Facebook) requires OAuth2 credentials from each provider. **Before running the app**, copy `.env.example` to `.env` and fill in the credentials for the providers you want to enable:
+
+```bash
+cp .env.example .env
+# Edit .env and set your client IDs and secrets
+```
+
+Only providers whose `*_CLIENT_ID` **and** `*_CLIENT_SECRET` are both set will appear as login options. You can start with just Google:
+
+```
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-client-secret
+```
+
+**Redirect URI to register with each provider:**
+```
+http://localhost/login/oauth2/code/google
+http://localhost/login/oauth2/code/microsoft
+http://localhost/login/oauth2/code/apple
+http://localhost/login/oauth2/code/facebook
+```
+
+> The `.env` file is gitignored — never commit secrets to the repository.
+
 ### Production Mode
 
 Build and run all services together using Docker Compose:

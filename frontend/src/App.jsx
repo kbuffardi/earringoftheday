@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import LoginPage from './components/LoginPage'
 import LoginModal from './components/LoginModal'
+import LoginPage from './components/LoginPage'
 import AccountSettings from './components/AccountSettings'
 import AdminPage from './components/AdminPage'
 import Home from './pages/Home'
@@ -55,7 +55,7 @@ function App() {
             user ? (
               <AccountSettings user={user} onUserUpdated={setUser} />
             ) : (
-              <Navigate to="/login" replace />
+              <Navigate to="/" replace />
             )
           }
         />

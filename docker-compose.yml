@@ -21,6 +21,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    env_file:
+      - path: .env
+        required: false
     environment:
       DB_HOST: db
       DB_PORT: 5432
