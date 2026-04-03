@@ -26,7 +26,7 @@ public class User {
 
     private String lastName;
 
-    @Column(length = 1024)
+    @Column(length = 2048)
     private String avatarUrl;
 
     @Column(nullable = false)

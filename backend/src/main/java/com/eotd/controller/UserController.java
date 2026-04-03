@@ -7,8 +7,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -61,15 +59,15 @@ public class UserController {
     }
 
     private Map<String, Object> toDto(User user) {
-        Map<String, Object> dto = new HashMap<>();
-        dto.put("id", user.getId());
-        dto.put("email", user.getEmail());
-        dto.put("firstName", user.getFirstName() != null ? user.getFirstName() : "");
-        dto.put("lastName", user.getLastName() != null ? user.getLastName() : "");
-        dto.put("avatarUrl", user.getAvatarUrl());
-        dto.put("registrationDate", user.getRegistrationDate().toString());
-        dto.put("role", user.getRole().name());
-        dto.put("notificationPreference", user.getNotificationPreference().name());
-        return dto;
+        return Map.of(
+                "id", user.getId(),
+                "email", user.getEmail(),
+                "firstName", user.getFirstName() != null ? user.getFirstName() : "",
+                "lastName", user.getLastName() != null ? user.getLastName() : "",
+                "avatarUrl", user.getAvatarUrl() != null ? user.getAvatarUrl() : "",
+                "registrationDate", user.getRegistrationDate().toString(),
+                "role", user.getRole().name(),
+                "notificationPreference", user.getNotificationPreference().name()
+        );
     }
 }

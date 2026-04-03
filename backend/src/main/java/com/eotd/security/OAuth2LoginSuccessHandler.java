@@ -80,11 +80,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     private String extractAvatarUrl(OAuth2User user) {
-        // Google provides "picture" as a direct URL string
+        // Google and Microsoft provide "picture"
         Object picture = user.getAttribute("picture");
-        if (picture instanceof String s && !s.isBlank()) {
-            return s;
-        }
-        return null;
+        return picture != null ? picture.toString() : null;
     }
 }

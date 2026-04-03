@@ -23,7 +23,7 @@ function LoginPage() {
               onClick={() => handleLogin(provider.id)}
               className={`flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl font-medium transition ${provider.color}`}
             >
-              <span>{provider.icon}</span>
+              <span aria-hidden="true">{provider.icon}</span>
               Continue with {provider.name}
             </button>
           ))}

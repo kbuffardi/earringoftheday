@@ -35,13 +35,15 @@ public class UserService {
             // Update name and avatar fields in case they changed
             user.setFirstName(firstName);
             user.setLastName(lastName);
-            if (avatarUrl != null) {
+            if (avatarUrl != null && !avatarUrl.isBlank()) {
                 user.setAvatarUrl(avatarUrl);
             }
             return userRepository.save(user);
         }
         User user = new User(email, firstName, lastName);
-        user.setAvatarUrl(avatarUrl);
+        if (avatarUrl != null && !avatarUrl.isBlank()) {
+            user.setAvatarUrl(avatarUrl);
+        }
         if (defaultAdminEmails.contains(email.toLowerCase())) {
             user.setRole(User.Role.ADMIN);
         }
