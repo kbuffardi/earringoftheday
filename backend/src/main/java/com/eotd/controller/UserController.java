@@ -64,6 +64,7 @@ public class UserController {
                 "email", user.getEmail(),
                 "firstName", user.getFirstName() != null ? user.getFirstName() : "",
                 "lastName", user.getLastName() != null ? user.getLastName() : "",
+                "avatarUrl", user.getAvatarUrl() != null ? user.getAvatarUrl() : "",
                 "registrationDate", user.getRegistrationDate().toString(),
                 "role", user.getRole().name(),
                 "notificationPreference", user.getNotificationPreference().name()

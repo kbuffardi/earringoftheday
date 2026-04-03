@@ -37,6 +37,9 @@ public class User {
     @Column(nullable = false)
     private NotificationPreference notificationPreference = NotificationPreference.NONE;
 
+    @Column(length = 2048)
+    private String avatarUrl;
+
     public User() {}
 
     public User(String email, String firstName, String lastName) {
@@ -67,4 +70,8 @@ public class User {
     public void setNotificationPreference(NotificationPreference notificationPreference) {
         this.notificationPreference = notificationPreference;
     }
+
+    public String getAvatarUrl() { return avatarUrl; }
+
+    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
 }

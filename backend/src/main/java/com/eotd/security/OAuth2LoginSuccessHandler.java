@@ -33,9 +33,10 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         String email = extractEmail(oAuth2User);
         String firstName = extractFirstName(oAuth2User);
         String lastName = extractLastName(oAuth2User);
+        String avatarUrl = extractAvatarUrl(oAuth2User);
 
         if (email != null && !email.isBlank()) {
-            userService.loginOrRegister(email, firstName, lastName);
+            userService.loginOrRegister(email, firstName, lastName, avatarUrl);
         }
 
         response.sendRedirect(frontendUrl);
@@ -76,5 +77,11 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             return parts.length > 1 && !parts[1].isBlank() ? parts[1] : "";
         }
         return "";
+    }
+
+    private String extractAvatarUrl(OAuth2User user) {
+        // Google and Microsoft provide "picture"
+        Object picture = user.getAttribute("picture");
+        return picture != null ? picture.toString() : null;
     }
 }
