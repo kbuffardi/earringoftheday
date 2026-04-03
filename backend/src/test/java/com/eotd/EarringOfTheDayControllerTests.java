@@ -31,7 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect",
     "spring.jpa.hibernate.ddl-auto=create-drop",
     "app.frontend-url=http://localhost:5173",
-    "app.admin-emails=redrachelmason@gmail.com,mydatacollection@gmail.com"
+    "app.admin-emails=redrachelmason@gmail.com,mydatacollection@gmail.com",
+    "instagram.sync-initial-delay-ms=3600000"
 })
 class EarringOfTheDayControllerTests {
 
@@ -144,6 +145,30 @@ class EarringOfTheDayControllerTests {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].brand", is("Brand1")))
                 .andExpect(jsonPath("$[1].brand", is("Brand2")));
+    }
+
+    @Test
+    void getToday_fallsBackToMostRecent_whenNothingToday() throws Exception {
+        LocalDate yesterday = LocalDate.now(ZoneId.of("America/Los_Angeles")).minusDays(1);
+
+        EarringOfTheDay past1 = new EarringOfTheDay();
+        past1.setDate(yesterday);
+        past1.setBrand("PastBrand1");
+        past1.setDisplayOrder(0);
+
+        EarringOfTheDay past2 = new EarringOfTheDay();
+        past2.setDate(yesterday);
+        past2.setBrand("PastBrand2");
+        past2.setDisplayOrder(1);
+
+        eotdRepository.save(past1);
+        eotdRepository.save(past2);
+
+        mockMvc.perform(get("/api/eotd/today"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].brand", is("PastBrand1")))
+                .andExpect(jsonPath("$[1].brand", is("PastBrand2")));
     }
 
     @Test
