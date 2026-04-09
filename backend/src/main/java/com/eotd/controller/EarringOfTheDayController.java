@@ -34,11 +34,18 @@ public class EarringOfTheDayController {
         this.clickRepository = clickRepository;
     }
 
-    /** Public: get today's EOTD list (Pacific time), ordered by displayOrder */
+    /**
+     * Public: get today's EOTD list (Pacific time), ordered by displayOrder.
+     * Falls back to the most recent available entry when no entry exists for today.
+     */
     @GetMapping("/today")
     public List<EarringOfTheDay> getToday() {
         LocalDate today = LocalDate.now(PACIFIC);
-        return eotdRepository.findByDateOrderByDisplayOrderAsc(today);
+        List<EarringOfTheDay> todayList = eotdRepository.findByDateOrderByDisplayOrderAsc(today);
+        if (todayList.isEmpty()) {
+            return eotdRepository.findMostRecent();
+        }
+        return todayList;
     }
 
     /** Admin: list all EOTD entries */
